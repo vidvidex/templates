@@ -39,15 +39,13 @@
             class="card-header bg-primary bg-opacity-10 border-bottom d-flex justify-content-between align-items-center"
           >
             <h5 class="card-title mb-0 text-primary fw-semibold">Generated Code</h5>
-            <small class="text-muted" v-if="generatedCode">
-              {{ generatedCode.split('\n').length }} lines
+            <small class="text-muted" v-if="highlightedCode">
+              {{ highlightedCode.split('\n').length }} lines
             </small>
           </div>
           <div class="card-body p-0">
-            <pre
-              class="bg-dark text-light p-3 mb-0 rounded-0"
-              style="min-height: 400px; overflow-x: auto"
-            ><code class="text-light">{{ generatedCode || '// Select a template and configure settings to generate code' }}</code></pre>
+            <pre class="bg-dark p-3 mb-0 rounded-0" style="min-height: 400px; overflow-x: auto">
+              <code v-html="highlightedCode"></code></pre>
           </div>
         </div>
       </section>
@@ -58,6 +56,9 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import Prism from 'prismjs'
+import 'prismjs/themes/prism-okaidia.css'
+import 'prismjs/components/prism-verilog'
 
 const router = useRouter()
 const route = useRoute()
@@ -67,6 +68,14 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  language: {
+    type: String,
+    required: true,
+  },
+})
+
+const highlightedCode = computed(() => {
+  return Prism.highlight(props.generatedCode, Prism.languages[props.language], props.language)
 })
 
 const copyButtonText = ref('Copy')
@@ -94,4 +103,37 @@ const copyCode = async () => {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+pre code {
+  color: #f8f8f2 !important; /* Default text color */
+}
+
+/* Override any tokens that might be too dark */
+pre code .token.keyword {
+  color: #66d9ef !important; /* Bright blue for keywords */
+}
+
+pre code .token.string {
+  color: #a6e22e !important; /* Bright green for strings */
+}
+
+pre code .token.number {
+  color: #ae81ff !important; /* Purple for numbers */
+}
+
+pre code .token.comment {
+  color: #75715e !important; /* Gray for comments */
+}
+
+pre code .token.operator {
+  color: #f92672 !important; /* Pink for operators */
+}
+
+pre code .token.punctuation {
+  color: #f8f8f2 !important; /* White for punctuation */
+}
+
+pre code .token.builtin {
+  color: #fd971f !important; /* Orange for built-ins */
+}
+</style>

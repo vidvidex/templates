@@ -1,5 +1,5 @@
 <template>
-  <TemplateLayout :generated-code="generatedCode">
+  <TemplateLayout :generated-code="generatedCode" :language="settings.language">
     <template #settings>
       <div class="mb-3">
         <label class="form-label" for="module_name">Module Name:</label>

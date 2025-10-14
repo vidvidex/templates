@@ -13,6 +13,10 @@ pre code {
   line-height: 1.4;
 }
 
+pre[class*='language-'] {
+  margin: 0 !important;
+}
+
 .card {
   border: none;
   border-radius: 0.5rem;
